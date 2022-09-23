@@ -29,6 +29,12 @@ app.get('/ping', (req, res) => {
   return res.status(200).json({ message: 'pong' });
 });
 
+// 에러 처리 미들웨어
 app.use(errorHandler);
+
+// 등록되지 않은 라우터로 요청이 들어왔을 때 처리
+app.use((req, res, next) => {
+  res.status(404).json({ error: `${req.url} 라우터가 없습니다.` });
+});
 
 module.exports = app;

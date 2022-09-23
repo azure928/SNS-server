@@ -1,6 +1,7 @@
 const userRepository = require('./userRepository');
 
 // 유저 생성
+
 exports.createUser = async () => {
   const createdUser = await userRepository.createUser();
 
@@ -8,5 +9,9 @@ exports.createUser = async () => {
     userId: createdUser.id,
   };
   return createdUserId;
-  //throw new Error('BROKEN');
+
+  /*
+  const error = new Error('BROKEN');
+  error.statusCode = 400;
+  throw error;*/
 };

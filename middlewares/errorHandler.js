@@ -1,15 +1,7 @@
 const errorHandler = (err, req, res, next) => {
-  console.log('\x1b[33m%s\x1b[0m', err.stack);
+  console.log('\x1b[33m%s\x1b[0m', err);
 
-  const errorMessage = {
-    error: {
-      message: err.message,
-    },
-  };
-  if (err.name) {
-    errorMessage.error.field = err.name;
-  }
-  return res.status(500).json(errorMessage);
+  return res.status(err.statusCode || 500).json({ error: err.message || 'Internal Server Error' });
 };
 
 module.exports = errorHandler;

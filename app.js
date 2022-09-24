@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const errorHandler = require('./middlewares/errorHandler');
 const routes = require('./components/indexRouter');
 const { sequelize } = require('./database/models/index');
+//const logger = require('./config/logger');
 
 //* DB 연결
 sequelize
@@ -34,6 +35,7 @@ app.use(errorHandler);
 
 // 등록되지 않은 라우터로 요청이 들어왔을 때 처리
 app.use((req, res, next) => {
+  //logger.error(`${req.url} 라우터 요청`);
   res.status(404).json({ error: `${req.url} 라우터가 없습니다.` });
 });
 

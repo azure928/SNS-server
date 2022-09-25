@@ -9,6 +9,18 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         primaryKey: true,
       },
+      email: {
+        type: DataTypes.STRING(300),
+        allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING(300),
+        allowNull: false,
+      },
     },
     {
       sequelize,

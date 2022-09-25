@@ -13,6 +13,17 @@ exports.readUserByEmail = async (email) => {
 };
 
 /**
+ * 기능: id로 user 조회
+ */
+exports.readUserById = async (id) => {
+  return await User.findOne({
+    where: {
+      id: id,
+    },
+  });
+};
+
+/**
  * 기능: user 생성 (중복되지 않는 user id 생성)
  */
 exports.createUser = async (email, name, hash) => {

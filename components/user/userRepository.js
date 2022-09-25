@@ -2,7 +2,7 @@ const db = require('../../database/models/index');
 const User = db.user;
 
 /**
- * 기능: email로 user 조회 (이미 존재하는 email인지 확인)
+ * 기능: email로 user 조회 (존재하는 email인지 확인)
  */
 exports.readUserByEmail = async (email) => {
   return await User.findOne({

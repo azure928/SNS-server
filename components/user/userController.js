@@ -8,3 +8,10 @@ exports.signUp = async (req, res, next) => {
   console.log(createdUserId);
   res.status(201).json({ message: '회원가입 성공' });
 };
+
+// 로그인
+exports.login = async (req, res, next) => {
+  logger.info(`POST ${req.url}`);
+  const token = await userService.login(req.body);
+  res.status(200).json({ message: '로그인 성공', token });
+};

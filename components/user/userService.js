@@ -1,5 +1,6 @@
 const userRepository = require('./userRepository');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // 회원가입
 exports.signUp = async (body) => {
@@ -20,4 +21,26 @@ exports.signUp = async (body) => {
     userId: createdUser.id,
   };
   return createdUserId;
+};
+
+// 로그인
+exports.login = async (body) => {
+  const { email, password } = body;
+
+  const existedUser = await userRepository.readUserByEmail(email);
+  if (!existedUser) {
+    const error = new Error('가입되지 않은 이메일입니다.');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const isCorrect = await bcrypt.compare(password, existedUser.password);
+  if (!isCorrect) {
+    const error = new Error('비밀번호가 일치하지 않습니다.');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const token = jwt.sign({ id: existedUser.id }, process.env.SECRET_KEY);
+  return token;
 };

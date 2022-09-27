@@ -58,7 +58,6 @@ module.exports = {
       console.log('token === data', token === data);
       if (token === data) {
         try {
-          //console.log('여기에 왜 걸려?');
           jwt.verify(token, secret);
           return true;
         } catch (err) {

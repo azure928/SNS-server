@@ -1,6 +1,8 @@
 const userRepository = require('./userRepository');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
+const jwt = require('../../utils/jwt');
+const { redisCli } = require('../../utils/cache');
 
 // 회원가입
 exports.signUp = async (body) => {
@@ -24,6 +26,7 @@ exports.signUp = async (body) => {
 };
 
 // 로그인
+/*
 exports.login = async (body) => {
   const { email, password } = body;
 
@@ -43,4 +46,30 @@ exports.login = async (body) => {
 
   const token = jwt.sign({ id: existedUser.id }, process.env.SECRET_KEY);
   return token;
+};*/
+
+exports.login = async (body) => {
+  const { email, password } = body;
+
+  const existedUser = await userRepository.readUserByEmail(email);
+
+  if (existedUser) {
+    const isCorrect = await bcrypt.compare(password, existedUser.password);
+    if (isCorrect) {
+      const accessToken = jwt.sign(existedUser);
+      const refreshToken = jwt.refresh();
+
+      await redisCli.set(email, refreshToken);
+
+      return { accessToken, refreshToken };
+    } else {
+      const error = new Error('비밀번호가 일치하지 않습니다.');
+      error.statusCode = 401;
+      throw error;
+    }
+  } else {
+    const error = new Error('가입되지 않은 이메일입니다.');
+    error.statusCode = 401;
+    throw error;
+  }
 };

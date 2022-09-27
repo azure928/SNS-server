@@ -12,7 +12,7 @@ const isAuth = async (req, res, next) => {
   const token = authHeader.split(' ')[1];
   jwt.verify(token, process.env.SECRET_KEY, async (error, decoded) => {
     if (error) {
-      return res.status(401).json(AUTH_ERROR);
+      return res.status(401).json({ message: error.message });
     }
     const user = await userRepository.readUserById(decoded.id);
     if (!user) {

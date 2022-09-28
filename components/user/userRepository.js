@@ -1,5 +1,5 @@
 const db = require('../../database/models/index');
-const User = db.user;
+const User = db.users;
 
 /**
  * 기능: email로 user 조회 (존재하는 email인지 확인)

@@ -36,7 +36,7 @@ app.use(errorHandler);
 // 등록되지 않은 라우터로 요청이 들어왔을 때 처리
 app.use((req, res, next) => {
   //logger.error(`${req.url} 라우터 요청`);
-  res.status(404).json({ error: `${req.url} 라우터가 없습니다.` });
+  res.status(404).json({ message: `${req.method} ${req.url} 라우터가 없습니다.` });
 });
 
 module.exports = app;

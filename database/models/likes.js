@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
-    'posts',
+    'likes',
     {
       id: {
         autoIncrement: true,
@@ -11,34 +11,24 @@ module.exports = function (sequelize, DataTypes) {
       },
       user_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'users',
           key: 'id',
         },
       },
-      title: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
-      content: {
-        type: DataTypes.STRING(300),
-        allowNull: false,
-      },
-      hits: {
+      post_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        defaultValue: 0,
-      },
-      is_deleted: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: 0,
+        references: {
+          model: 'posts',
+          key: 'id',
+        },
       },
     },
     {
       sequelize,
-      tableName: 'posts',
+      tableName: 'likes',
       timestamps: true,
       indexes: [
         {
@@ -49,8 +39,14 @@ module.exports = function (sequelize, DataTypes) {
         },
         {
           name: 'user_id',
+          unique: true,
           using: 'BTREE',
-          fields: [{ name: 'user_id' }],
+          fields: [{ name: 'user_id' }, { name: 'post_id' }],
+        },
+        {
+          name: 'post_id',
+          using: 'BTREE',
+          fields: [{ name: 'post_id' }],
         },
       ],
     }

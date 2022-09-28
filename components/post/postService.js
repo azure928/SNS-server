@@ -42,6 +42,12 @@ exports.createPost = async (userId, body) => {
 exports.deleteOrRestorePost = async (userId, postId) => {
   const seletedPost = await postRepository.readPostById(postId);
 
+  if (!seletedPost) {
+    const error = new Error('존재하지 않는 게시물입니다.');
+    error.statusCode = 404;
+    throw error;
+  }
+
   const isSameUser = userId === seletedPost.user_id;
   if (!isSameUser) {
     const error = new Error('작성자만 삭제할 수 있습니다.');
@@ -56,5 +62,27 @@ exports.deleteOrRestorePost = async (userId, postId) => {
     return { message: '게시글 복구 성공' };
   } else {
     return { message: '게시글 삭제 성공' };
+  }
+};
+
+// 게시글 좋아요 or 좋아요 취소
+exports.createOrDeleteLike = async (userId, postId) => {
+  const seletedPost = await postRepository.readPostById(postId);
+
+  if (!seletedPost) {
+    const error = new Error('존재하지 않는 게시물입니다.');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const isLike = await postRepository.readLike(userId, postId);
+  //console.log('isLike', isLike);
+
+  if (isLike) {
+    await postRepository.deleteLike(userId, postId);
+    return { message: '좋아요 취소 성공' };
+  } else {
+    await postRepository.createLike(userId, postId);
+    return { message: '좋아요 성공' };
   }
 };

@@ -2,6 +2,7 @@ const db = require('../../database/models/index');
 const Post = db.posts;
 const Tag = db.tags;
 const PostTag = db.post_tag;
+const Likes = db.likes;
 
 /**
  * 기능: post 생성
@@ -55,4 +56,33 @@ exports.updatePostIsDeleted = async (postId, isDeleted) => {
     },
     { where: { id: postId } }
   );
+};
+
+/**
+ * 기능: 좋아요 테이블에 create
+ */
+exports.createLike = async (userId, postId) => {
+  return await Likes.create({
+    user_id: userId,
+    post_id: postId,
+  });
+};
+
+/**
+ * 기능: 좋아요 테이블에서 delete
+ */
+exports.deleteLike = async (userId, postId) => {
+  return await Likes.destroy({
+    where: { user_id: userId, post_id: postId },
+  });
+};
+
+/**
+ * 기능: 좋아요 테이블에서 userId, postId 조합으로 select
+ */
+exports.readLike = async (userId, postId) => {
+  return await Likes.findOne({
+    where: { user_id: userId, post_id: postId },
+    raw: true,
+  });
 };

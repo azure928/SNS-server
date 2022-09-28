@@ -4,5 +4,5 @@ const postService = require('./postService');
 exports.createPost = async (req, res, next) => {
   const result = await postService.createPost(req.userId, req.body);
 
-  res.status(200).json({ message: '게시글 생성 성공', postId: result });
+  res.status(201).json({ message: '게시글 생성 성공', postId: result });
 };

@@ -13,3 +13,10 @@ exports.deleteOrRestorePost = async (req, res, next) => {
 
   res.status(201).json(result);
 };
+
+// 게시글 좋아요 or 좋아요 취소
+exports.createOrDeleteLike = async (req, res, next) => {
+  const result = await postService.createOrDeleteLike(req.userId, req.params.id);
+
+  res.status(201).json(result);
+};

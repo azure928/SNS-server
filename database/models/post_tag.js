@@ -13,7 +13,7 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-          model: 'post',
+          model: 'posts',
           key: 'id',
         },
       },
@@ -21,7 +21,7 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-          model: 'tag',
+          model: 'tags',
           key: 'id',
         },
       },

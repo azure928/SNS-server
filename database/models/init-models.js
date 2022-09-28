@@ -1,27 +1,27 @@
 var DataTypes = require('sequelize').DataTypes;
-var _post = require('./post');
 var _post_tag = require('./post_tag');
-var _tag = require('./tag');
-var _user = require('./user');
+var _posts = require('./posts');
+var _tags = require('./tags');
+var _users = require('./users');
 
 function initModels(sequelize) {
-  var post = _post(sequelize, DataTypes);
   var post_tag = _post_tag(sequelize, DataTypes);
-  var tag = _tag(sequelize, DataTypes);
-  var user = _user(sequelize, DataTypes);
+  var posts = _posts(sequelize, DataTypes);
+  var tags = _tags(sequelize, DataTypes);
+  var users = _users(sequelize, DataTypes);
 
-  post_tag.belongsTo(post, { as: 'post', foreignKey: 'post_id' });
-  post.hasMany(post_tag, { as: 'post_tags', foreignKey: 'post_id' });
-  post_tag.belongsTo(tag, { as: 'tag', foreignKey: 'tag_id' });
-  tag.hasMany(post_tag, { as: 'post_tags', foreignKey: 'tag_id' });
-  post.belongsTo(user, { as: 'user', foreignKey: 'user_id' });
-  user.hasMany(post, { as: 'posts', foreignKey: 'user_id' });
+  post_tag.belongsTo(posts, { as: 'post', foreignKey: 'post_id' });
+  posts.hasMany(post_tag, { as: 'post_tags', foreignKey: 'post_id' });
+  post_tag.belongsTo(tags, { as: 'tag', foreignKey: 'tag_id' });
+  tags.hasMany(post_tag, { as: 'post_tags', foreignKey: 'tag_id' });
+  posts.belongsTo(users, { as: 'user', foreignKey: 'user_id' });
+  users.hasMany(posts, { as: 'posts', foreignKey: 'user_id' });
 
   return {
-    post,
     post_tag,
-    tag,
-    user,
+    posts,
+    tags,
+    users,
   };
 }
 module.exports = initModels;

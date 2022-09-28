@@ -30,16 +30,17 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: true,
         defaultValue: 0,
       },
-      status: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        defaultValue: 1,
+      is_deleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: 0,
       },
     },
     {
       sequelize,
       tableName: 'posts',
       timestamps: true,
+      paranoid: true,
       indexes: [
         {
           name: 'PRIMARY',

@@ -22,10 +22,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING(300),
         allowNull: false,
       },
-      status: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        defaultValue: 1,
+      is_deleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: 0,
       },
     },
     {

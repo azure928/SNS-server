@@ -6,9 +6,7 @@ const User = db.users;
  */
 exports.readUserByEmail = async (email) => {
   return await User.findOne({
-    where: {
-      email: email,
-    },
+    where: { email: email },
   });
 };
 
@@ -17,9 +15,7 @@ exports.readUserByEmail = async (email) => {
  */
 exports.readUserById = async (id) => {
   return await User.findOne({
-    where: {
-      id: id,
-    },
+    where: { id: id },
   });
 };
 

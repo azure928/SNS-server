@@ -36,3 +36,25 @@ exports.createPost = async (userId, body) => {
 
   return postId;
 };
+
+// 게시글 삭제 or 복구
+// is_deleted 컬럼이 true일 경우 false로, false일 경우 true로 업데이트
+exports.deleteOrRestorePost = async (userId, postId) => {
+  const seletedPost = await postRepository.readPostById(postId);
+
+  const isSameUser = userId === seletedPost.user_id;
+  if (!isSameUser) {
+    const error = new Error('작성자만 삭제할 수 있습니다.');
+    error.statusCode = 401;
+    throw error;
+  }
+
+  const isDeleted = !seletedPost.is_deleted;
+  await postRepository.updatePostIsDeleted(postId, isDeleted);
+
+  if (isDeleted === false) {
+    return { message: '게시글 복구 성공' };
+  } else {
+    return { message: '게시글 삭제 성공' };
+  }
+};

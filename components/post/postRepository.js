@@ -4,8 +4,10 @@ const Tag = db.tags;
 const PostTag = db.post_tag;
 const Likes = db.likes;
 const User = db.users;
+const sequelize = require('sequelize');
 const SQ = require('sequelize');
 const Sequelize = SQ.Sequelize;
+const Op = sequelize.Op;
 
 /**
  * 기능: post 생성
@@ -159,7 +161,7 @@ exports.updatePost = async (title, content, postId) => {
 /**
  * 기능: post 목록 조회
  */
-exports.readPosts = async () => {
+exports.readPosts = async (search) => {
   return await Post.findAll({
     attributes: [
       ['id', 'post_id'],
@@ -176,7 +178,18 @@ exports.readPosts = async () => {
         attributes: [],
       },
     ],
-    raw: true,
+    where: {
+      [Op.and]: [
+        { is_deleted: false },
+        {
+          [Op.or]: [
+            { title: { [Op.like]: '%' + search + '%' } },
+            { content: { [Op.like]: '%' + search + '%' } },
+          ],
+        },
+      ],
+    },
     order: [['createdAt', 'DESC']],
+    raw: true,
   });
 };

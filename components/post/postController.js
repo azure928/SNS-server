@@ -37,7 +37,11 @@ exports.updatePost = async (req, res, next) => {
 
 // 게시글 목록 보기
 exports.readPosts = async (req, res, next) => {
-  const result = await postService.readPosts(/*req.query*/);
+  const result = await postService.readPosts(req.query);
 
-  res.status(200).json(result);
+  if (result.length == 0) {
+    res.status(204).send();
+  } else {
+    res.status(200).json(result);
+  }
 };

@@ -161,7 +161,7 @@ exports.updatePost = async (title, content, postId) => {
 /**
  * 기능: post 목록 조회
  */
-exports.readPosts = async (search) => {
+exports.readPosts = async (search, page, countResult) => {
   return await Post.findAll({
     attributes: [
       ['id', 'post_id'],
@@ -190,6 +190,8 @@ exports.readPosts = async (search) => {
       ],
     },
     order: [['createdAt', 'DESC']],
+    offset: (page - 1) * countResult,
+    limit: countResult,
     raw: true,
   });
 };

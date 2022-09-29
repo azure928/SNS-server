@@ -7,16 +7,16 @@ const { isAuth } = require('../../middlewares/auth');
 const { refresh } = require('./refresh');
 
 // 회원가입
-router.post('/user/signup', signUpValidator(), userController.signUp);
+router.post('/users/signup', signUpValidator(), userController.signUp);
 
 // 로그인
-router.post('/user/login', loginValidator(), userController.login);
+router.post('/users/login', loginValidator(), userController.login);
 
 // Access token 재발급
-router.post('/user/refresh', refresh);
+router.post('/users/refresh', refresh);
 
 // 인증 미들웨어 테스트용
-router.get('/user/authtest', isAuth, (req, res) => {
+router.get('/users/authtest', isAuth, (req, res) => {
   console.log('req!!!', req.userId);
   res.status(200).json({ message: '인증 성공' });
 });

@@ -3,6 +3,9 @@ const Post = db.posts;
 const Tag = db.tags;
 const PostTag = db.post_tag;
 const Likes = db.likes;
+const User = db.users;
+const SQ = require('sequelize');
+const Sequelize = SQ.Sequelize;
 
 /**
  * 기능: post 생성
@@ -83,6 +86,59 @@ exports.deleteLike = async (userId, postId) => {
 exports.readLike = async (userId, postId) => {
   return await Likes.findOne({
     where: { user_id: userId, post_id: postId },
+    raw: true,
+  });
+};
+
+/**
+ * 기능: posts 테이블에 hits +1 업데이트
+ */
+exports.updatePostsHits = async (postId, hits) => {
+  return await Post.update(
+    {
+      hits: hits + 1,
+    },
+    { where: { id: postId } }
+  );
+};
+
+/**
+ * 기능: post id로 post, 유저 이름 조회
+ */
+exports.readPostAndUserName = async (postId) => {
+  return await Post.findOne({
+    attributes: [
+      [Sequelize.col('user.name'), 'user_name'],
+      ['title', 'title'],
+      ['content', 'content'],
+      ['hits', 'hits'],
+    ],
+    include: [
+      {
+        model: User,
+        as: 'user',
+        attributes: [],
+      },
+    ],
+    where: { id: postId },
+    raw: true,
+  });
+};
+
+/**
+ * 기능: post id로 tag 조회
+ */
+exports.readTags = async (postId) => {
+  return await PostTag.findAll({
+    attributes: [[Sequelize.col('tag.tag'), 'tag']],
+    include: [
+      {
+        model: Tag,
+        as: 'tag',
+        attributes: [],
+      },
+    ],
+    where: { post_id: postId },
     raw: true,
   });
 };

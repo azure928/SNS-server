@@ -15,4 +15,7 @@ router.delete('/posts/:id', postController.deleteOrRestorePost);
 // 게시글 좋아요 or 좋아요 취소
 router.post('/posts/:id/heart', postController.createOrDeleteLike);
 
+// 게시글 상세보기
+router.get('/posts/:id', postController.readPost);
+
 module.exports = router;

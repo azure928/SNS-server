@@ -20,3 +20,10 @@ exports.createOrDeleteLike = async (req, res, next) => {
 
   res.status(201).json(result);
 };
+
+// 게시글 상세보기
+exports.readPost = async (req, res, next) => {
+  const result = await postService.readPost(req.userId, req.params.id);
+
+  res.status(200).json(result);
+};

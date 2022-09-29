@@ -86,3 +86,40 @@ exports.createOrDeleteLike = async (userId, postId) => {
     return { message: '좋아요 성공' };
   }
 };
+
+// 게시글 상세보기
+exports.readPost = async (userId, postId) => {
+  const seletedPost = await postRepository.readPostById(postId);
+  if (!seletedPost) {
+    const error = new Error('존재하지 않는 게시물입니다.');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  let isLike = false;
+  const like = await postRepository.readLike(userId, postId);
+  if (like) {
+    isLike = true;
+  }
+
+  const tags = await postRepository.readTags(postId);
+  let tagArr = [];
+  for (let i = 0; i < tags.length; i++) {
+    tagArr[i] = '#' + tags[i].tag;
+  }
+
+  const post = await postRepository.readPostAndUserName(postId);
+
+  const result = {
+    writer: post.user_name,
+    title: post.title,
+    content: post.content,
+    hits: post.hits,
+    isLike: isLike,
+    tags: tagArr,
+  };
+
+  await postRepository.updatePostsHits(postId, seletedPost.hits);
+
+  return result;
+};

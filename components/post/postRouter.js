@@ -18,4 +18,7 @@ router.post('/posts/:id/heart', postController.createOrDeleteLike);
 // 게시글 상세보기
 router.get('/posts/:id', postController.readPost);
 
+// 게시글 수정
+router.patch('/posts/:id', postValidator(), postController.updatePost);
+
 module.exports = router;

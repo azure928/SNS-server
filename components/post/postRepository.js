@@ -150,8 +150,33 @@ exports.updatePost = async (title, content, postId) => {
   return await Post.update(
     {
       title: title,
-      content: content
+      content: content,
     },
     { where: { id: postId } }
   );
+};
+
+/**
+ * 기능: post 목록 조회
+ */
+exports.readPosts = async () => {
+  return await Post.findAll({
+    attributes: [
+      ['id', 'post_id'],
+      [Sequelize.col('user.name'), 'writer'],
+      ['title', 'title'],
+      ['content', 'content'],
+      ['hits', 'hits'],
+      ['createdAt', 'date'],
+    ],
+    include: [
+      {
+        model: User,
+        as: 'user',
+        attributes: [],
+      },
+    ],
+    raw: true,
+    order: [['createdAt', 'DESC']],
+  });
 };

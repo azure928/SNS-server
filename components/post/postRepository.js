@@ -142,3 +142,16 @@ exports.readTags = async (postId) => {
     raw: true,
   });
 };
+
+/**
+ * 기능: posts 테이블 title, content 업데이트
+ */
+exports.updatePost = async (title, content, postId) => {
+  return await Post.update(
+    {
+      title: title,
+      content: content
+    },
+    { where: { id: postId } }
+  );
+};

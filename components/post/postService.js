@@ -6,13 +6,6 @@ exports.createPost = async (userId, body) => {
   const { title, content, tags } = body;
   const hashtags = tags.match(/#[^\s#]*/g);
 
-  const existedUser = await userRepository.readUserById(userId);
-  if (!existedUser) {
-    const error = new Error('가입되지 않은 유저입니다.');
-    error.statusCode = 400;
-    throw error;
-  }
-
   // posts 테이블에 create
   const createdPost = await postRepository.createPost(title, content, userId);
   const postId = createdPost.id;
@@ -76,7 +69,6 @@ exports.createOrDeleteLike = async (userId, postId) => {
   }
 
   const isLike = await postRepository.readLike(userId, postId);
-  //console.log('isLike', isLike);
 
   if (isLike) {
     await postRepository.deleteLike(userId, postId);
@@ -122,4 +114,25 @@ exports.readPost = async (userId, postId) => {
   await postRepository.updatePostsHits(postId, seletedPost.hits);
 
   return result;
+};
+
+// 게시글 수정
+exports.updatePost = async (userId, postId, body) => {
+  const { title, content } = body;
+
+  const seletedPost = await postRepository.readPostById(postId);
+  if (!seletedPost) {
+    const error = new Error('존재하지 않는 게시물입니다.');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const isSameUser = userId === seletedPost.user_id;
+  if (!isSameUser) {
+    const error = new Error('작성자만 수정할 수 있습니다.');
+    error.statusCode = 401;
+    throw error;
+  }
+
+  await postRepository.updatePost(title, content, postId);
 };

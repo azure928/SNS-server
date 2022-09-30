@@ -136,3 +136,19 @@ exports.updatePost = async (userId, postId, body) => {
 
   await postRepository.updatePost(title, content, postId);
 };
+
+// 게시글 목록 보기
+exports.readPosts = async (query) => {
+  const { search, page, count } = query;
+
+  let countResult;
+  if (!count) {
+    countResult = 10;
+  } else {
+    countResult = count;
+  }
+
+  const result = await postRepository.readPosts(search, page, Number(countResult));
+
+  return result;
+};

@@ -15,10 +15,13 @@ router.delete('/posts/:id', postController.deleteOrRestorePost);
 // 게시글 좋아요 or 좋아요 취소
 router.post('/posts/:id/heart', postController.createOrDeleteLike);
 
-// 게시글 상세보기
+// 게시글 상세 보기
 router.get('/posts/:id', postController.readPost);
 
 // 게시글 수정
 router.patch('/posts/:id', postValidator(), postController.updatePost);
+
+// 게시글 목록 보기
+router.get('/posts', postController.readPosts);
 
 module.exports = router;

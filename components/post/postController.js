@@ -34,3 +34,14 @@ exports.updatePost = async (req, res, next) => {
 
   res.status(200).json({ message: '게시글 수정 성공' });
 };
+
+// 게시글 목록 보기
+exports.readPosts = async (req, res, next) => {
+  const result = await postService.readPosts(req.query);
+
+  if (result.length == 0) {
+    res.status(204).send();
+  } else {
+    res.status(200).json(result);
+  }
+};
